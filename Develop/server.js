@@ -31,6 +31,19 @@ app.post('/api/notes', (req,res) => {
     res.json(noteRead);
 });
 
+// Route for deleting notes based on their ID
+app.delete('/api/notes:id', (req,res) => {
+    const noteID = req.params.id;
+    const list = JSON.parse(fs.readFileSync('./db/db.json'));
+    if (notes[i].id == req.params.id) {
+        notes.splice(i, 1)
+    }
+
+    fs.writeFileSync('./db/db.json', JSON.stringify(notes));
+    res.sendFile(path.join(__dirname, './db/db.json'));
+    console.log(notes);
+});
+
 // Notes route to get info from the notes.html file on the front end
 app.get('/notes', (req,res) => {
     res.sendFile(path.join(__dirname, './public/notes.html'));
