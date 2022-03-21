@@ -19,6 +19,18 @@ app.get('/api/notes', (req,res) => {
     res.sendFile(path.join(__dirname, './db/db.json'));
 });
 
+// Route for posting notes
+app.post('/api/notes', (req,res) => {
+    const note = req.body;
+    const noteRead = JSON.parse(fs.readFileSync('./db/db.json'));
+
+    note.id = uniqueID();
+    noteRead.push(note);
+
+    fs.writeFileSync('./db/db.json', JSON.stringify(noteRead));
+    res.json(noteRead);
+});
+
 // Notes route to get info from the notes.html file on the front end
 app.get('/notes', (req,res) => {
     res.sendFile(path.join(__dirname, './public/notes.html'));
@@ -27,6 +39,7 @@ app.get('/notes', (req,res) => {
 app.get('*', (req,res) => {
     res.sendFile(path.join(__dirname, './public/index.html'));
 });
+
 
 // Starts the server and console logs if it's working
 app.listen(PORT, () => {
