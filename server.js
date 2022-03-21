@@ -3,7 +3,7 @@ const PORT = process.env.PORT || 3001;
 const app = express();
 const fs = require('fs');
 const path = require('path');
-const uniqueID = require('uuid');
+const uniqueID = require('uniqid');
 const notes = require('./db/db.json');
 
 // Middleware
@@ -14,10 +14,22 @@ app.use(express.json());
 // Parse incoming css/js data
 app.use(express.static('public'));
 
+
+// Route for getting info from the index.html file on the front end
+app.get('*', (req,res) => {
+    res.sendFile(path.join(__dirname, './public/index.html'));
+});
+
+// Notes route to get info from the notes.html file on the front end
+app.get('/notes', (req,res) => {
+    res.sendFile(path.join(__dirname, './public/notes.html'));
+});
+
 // API route for notes to be pulled from database
 app.get('/api/notes', (req,res) => {
     res.sendFile(path.join(__dirname, './db/db.json'));
 });
+
 
 // Route for posting notes
 app.post('/api/notes', (req,res) => {
@@ -31,8 +43,9 @@ app.post('/api/notes', (req,res) => {
     res.json(noteRead);
 });
 
+
 // Route for deleting notes based on their ID
-app.delete('/api/notes:id', (req,res) => {
+app.delete('/api/notes/:id', (req,res) => {
     const noteID = req.params.id;
     const list = JSON.parse(fs.readFileSync('./db/db.json'));
     if (notes[i].id == req.params.id) {
@@ -42,15 +55,6 @@ app.delete('/api/notes:id', (req,res) => {
     fs.writeFileSync('./db/db.json', JSON.stringify(notes));
     res.sendFile(path.join(__dirname, './db/db.json'));
     console.log(notes);
-});
-
-// Notes route to get info from the notes.html file on the front end
-app.get('/notes', (req,res) => {
-    res.sendFile(path.join(__dirname, './public/notes.html'));
-});
-// Route for getting info from the index.html file on the front end
-app.get('*', (req,res) => {
-    res.sendFile(path.join(__dirname, './public/index.html'));
 });
 
 
