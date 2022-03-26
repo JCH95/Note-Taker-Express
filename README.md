@@ -8,4 +8,4 @@ and save them onto a list on the left side of the screen. The user can add, edit
 ![image](https://user-images.githubusercontent.com/94874020/160255998-89e55f92-9fc0-45e7-bace-9b66eebc0737.png)
 
 ## URL of Deployed App
-
+https://jch95.github.io/Note-Taker-Express/
