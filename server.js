@@ -3,7 +3,7 @@ const PORT = process.env.PORT || 3001;
 const app = express();
 const fs = require('fs');
 const path = require('path');
-const uniqueID = require('uniqid');
+const uniqueid = require('uniqid');
 const notes = require('./db/db.json');
 
 // Middleware
@@ -15,11 +15,6 @@ app.use(express.json());
 app.use(express.static('public'));
 
 
-// Route for getting info from the index.html file on the front end
-app.get('*', (req,res) => {
-    res.sendFile(path.join(__dirname, './public/index.html'));
-});
-
 // Notes route to get info from the notes.html file on the front end
 app.get('/notes', (req,res) => {
     res.sendFile(path.join(__dirname, './public/notes.html'));
@@ -30,13 +25,18 @@ app.get('/api/notes', (req,res) => {
     res.sendFile(path.join(__dirname, './db/db.json'));
 });
 
+// Route for getting info from the index.html file on the front end
+app.get('*', (req,res) => {
+    res.sendFile(path.join(__dirname, './public/index.html'));
+});
+
 
 // Route for posting notes
 app.post('/api/notes', (req,res) => {
     const note = req.body;
     const noteRead = JSON.parse(fs.readFileSync('./db/db.json'));
 
-    note.id = uniqueID();
+    note.id = uniqueid();
     noteRead.push(note);
 
     fs.writeFileSync('./db/db.json', JSON.stringify(noteRead));
